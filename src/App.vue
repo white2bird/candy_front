@@ -1,12 +1,16 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import Home from '@/views/Home.vue';
+import Layout from '@/views/Layout.vue';
 </script>
 
 <template>
   <div>
-    <Home></Home>
+    <Layout></Layout>
   </div>
 </template>
+
+<style lang="less" scoped>
+
+</style>
 

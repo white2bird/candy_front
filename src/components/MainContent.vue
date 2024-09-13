@@ -10,6 +10,8 @@
 .main-content{
     display: flex;
     background-color: red;
+    flex-basis: 1;
+    flex-grow: 10;
 }
 
 </style>

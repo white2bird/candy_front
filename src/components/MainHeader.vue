@@ -8,6 +8,9 @@
 .main-header{
     display: flex;
     background-color: yellow;
+    flex-basis: 1;
+    flex-grow: 1;
+    max-height: 50px;
 }
 
 </style>
