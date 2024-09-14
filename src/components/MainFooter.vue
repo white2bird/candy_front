@@ -1,6 +1,6 @@
 <template>
     <div class="main-footer">
-        this is main footer
+        <!-- 废弃 -->
     </div>
 </template>
 

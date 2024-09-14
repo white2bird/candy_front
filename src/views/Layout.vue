@@ -1,9 +1,9 @@
 <template>
     <div class="container_layout">
         <Info></Info>
-        <InfoBlank></InfoBlank>
+        <!-- <InfoBlank></InfoBlank> -->
         <Home></Home>
-        <PlaceHolder></PlaceHolder>
+        <!-- <PlaceHolder></PlaceHolder> -->
     </div>
     
 </template>

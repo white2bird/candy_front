@@ -1,8 +1,6 @@
 <template>
     <div class="container">
-        <MainHeader></MainHeader>
         <MainContent></MainContent>
-        <MainFooter></MainFooter>   
     </div>
     
 </template>
@@ -11,6 +9,7 @@
     import MainHeader from '@/components/MainHeader.vue';
     import MainContent from '@/components/MainContent.vue';
     import MainFooter from '@/components/MainFooter.vue';
+    import PlaceHolder from '@/components/PlaceHolder.vue';
 
 </script>
 
@@ -20,7 +19,15 @@ body{
 }
 .container{
     display: flex;
-    flex-direction: column;
+    // flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 50px;
+    padding-left: 64px;
+    padding-right: 64px;
+}
+.main{
+    display: flex;
+    // flex-direction: column;
     height: 100vh;
     width: 100vw;
     margin: 0px;
