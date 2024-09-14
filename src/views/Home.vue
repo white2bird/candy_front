@@ -24,6 +24,7 @@ body{
     flex-basis: 50px;
     padding-left: 64px;
     padding-right: 64px;
+    background-image: url('@/assets/back.jpg');
 }
 .main{
     display: flex;

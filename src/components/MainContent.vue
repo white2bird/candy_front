@@ -25,7 +25,6 @@
 .main-content{
     display: flex;
     flex-direction: column;
-    background-color: red;
     flex-basis: 1;
     flex-grow: 10;
 }
