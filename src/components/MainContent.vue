@@ -10,14 +10,27 @@
 
 
 <script setup>
-    import { ref } from 'vue';
+    import { ref,inject } from 'vue';
     import Login from '@/components/Login.vue';
+    
     const login_show = ref(false);
-
+    const $request = inject('$request');
 
     const showLoginModal = (obj) => {
         login_show.value = obj;
     }
+
+    const init_request = () => {
+        $request.get("/user/info", {
+            headers: {
+                'Token': localStorage.getItem("token")
+            }
+        })
+            .then(res => {
+                console.log(res)
+            })
+    }
+    init_request();
 
 </script>
 

@@ -3,7 +3,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    loginButtonName: '登陆'
+    loginButtonName: '登录/注册'
   },
   mutations: {
     setUsername(state, newUsername) {

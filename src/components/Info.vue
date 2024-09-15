@@ -4,24 +4,24 @@
             this is info
         </div>
         <div class="Info-my">
-            <el-button type="primary" round @click="showLoginModal(true)">{{ loginButtonName }}</el-button>
-            <Login :visible="login_show" @update:visible="showLoginModal"></Login>
+            <el-button type="primary" round @click="toLogin">{{ loginButtonName }}</el-button>
+            <!-- <Login :visible="login_show" @update:visible="showLoginModal"></Login> -->
         </div>
     </div>
 </template>
 
 <script setup>
     import { ref,computed } from 'vue';
-    import Login from '@/components/Login.vue';
     import { useStore } from 'vuex';
+    import { useRouter } from 'vue-router';
     const store =  useStore();
-    const login_show = ref(false);
+    const router = useRouter();
     const loginButtonName = computed(() => store.state.loginButtonName)
     
 
 
-    const showLoginModal = (val) => {
-        login_show.value = val;
+    const toLogin = () => {
+        router.push('/login')
     }
 
 </script>

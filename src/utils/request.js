@@ -8,7 +8,11 @@ const request = axios.create({
 
 request.interceptors.request.use(
     (config) => {
-        // 在发送请求之前做些什么
+        // 发送之前带上token
+        var token = localStorage.getItem("token")
+        if(token != null && token != ""){
+            config.headers['token'] = token
+        }
         return config
     },
     (error) => {
