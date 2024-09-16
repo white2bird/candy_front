@@ -82,7 +82,7 @@ const scrollToSection = (index) => {
         set_click_close = setTimeout(() => {
             // 防止滚动事件影响点击态
             click_to_tab.value = false
-        }, 400)
+        }, 600)
     }
 };
 
