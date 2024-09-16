@@ -11,7 +11,7 @@ request.interceptors.request.use(
         // 发送之前带上token
         var token = localStorage.getItem("token")
         if(token != null && token != ""){
-            config.headers['token'] = token
+            config.headers.token = token
         }
         return config
     },

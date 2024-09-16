@@ -1,5 +1,7 @@
 // store/index.js
+import { plugin } from 'postcss'
 import { createStore } from 'vuex'
+import createPersistedState  from 'vuex-persistedstate'
 
 export default createStore({
   state: {
@@ -15,5 +17,10 @@ export default createStore({
     updateUsername({ commit }, newUsername) {
       commit('setUsername', newUsername)
     }
-  }
+  },
+  plugins: [
+    createPersistedState({
+      storage: window.localStorage
+    })
+  ]
 })

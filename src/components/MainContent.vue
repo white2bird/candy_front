@@ -23,7 +23,7 @@
     const init_request = () => {
         $request.get("/user/info", {
             headers: {
-                'Token': localStorage.getItem("token")
+                'token': localStorage.getItem("token")
             }
         })
             .then(res => {

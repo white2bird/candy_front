@@ -20,7 +20,7 @@
 
                 <!-- Content Sections -->
                 <div class="content" ref="contentRef">
-                    <div v-for="(tab, index) in tabs" :key="index" class="section">
+                    <div v-for="(tab, index) in tabs" :key="index" ref="sections" class="section">
                         <h2>{{ tab.title }}</h2>
                         <div class="sub-items">
                             <div v-for="(item, idx) in tab.items" :key="idx" class="sub-item">
@@ -43,18 +43,18 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 
 const tabs = ref([
-    {
-        title: 'Tab 1',
-        items: ['Item 1-1', 'Item 1-2', 'Item 1-3'],
-    },
-    {
-        title: 'Tab 2',
-        items: ['Item 2-1', 'Item 2-2', 'Item 2-3'],
-    },
-    {
-        title: 'Tab 3',
-        items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
-    },
+  {
+    title: 'Tab 1',
+    items: ['Item 1-1', 'Item 1-2', 'Item 1-3'],
+  },
+  {
+    title: 'Tab 2',
+    items: ['Item 2-1', 'Item 2-2', 'Item 2-3'],
+  },
+  {
+    title: 'Tab 3',
+    items: ['Item 3-1', 'Item 3-2', 'Item 3-3'],
+  },
 ]);
 
 const activeTabIndex = ref(0);
@@ -63,50 +63,58 @@ const contentRef = ref(null);
 let observer = null;
 
 const scrollToSection = (index) => {
-    if (sections.value[index]) {
-        sections.value[index].scrollIntoView({ behavior: 'smooth' });
-        activeTabIndex.value = index;
-        // sections.value = contentRef.value.querySelectorAll('.section');
-    }
+  console.log (sections)
+  console.log('scrollToSection', index);
+  console.log('sections.value', sections.value[index]);
+  if (sections.value[index]) {
+    sections.value[index].scrollIntoView({ behavior: 'smooth' });
+    // activeTabIndex.value = index;
+    // sections.value = contentRef.value.querySelectorAll('.section');
+  }
 };
 
 onMounted(async () => {
-    // 等待下一次 DOM 更新，确保所有的 refs 都已被正确赋值
-    await nextTick();
+  // 等待下一次 DOM 更新，确保所有的 refs 都已被正确赋值
+  await nextTick();
 
+  console.log('-----------------init--------------')
+  // 获取所有的 section 元素
+  const current_section = contentRef.value.querySelectorAll('.section');
+  if  (current_section !== undefined && current_section !== null && current_section.length > 0){
+    sections.value = current_section;
+  }
 
-    // 获取所有的 section 元素
-    const current_section = contentRef.value.querySelectorAll('.section');
-    if (current_section !== undefined && current_section !== null && current_section.length > 0) {
-        sections.value = current_section;
-    }
-    observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                const index = Array.from(sections.value).findIndex(section => section === entry.target)
-                console.log('-----------index-------------', index)
-                // if(index - activeTabIndex.value > 1 || activeTabIndex.value - index > 1){
-                //     return
-                // }
-                activeTabIndex.value = index
-            })
-        },
-        {
-            root: contentRef.value,
-            threshold: 0.6,
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = Array.from(sections.value).findIndex(
+            (section) => section === entry.target
+          );
+          console.log('intersecting', index);
+          if (index !== -1) {
+            activeTabIndex.value = index;
+          }
         }
-    );
-
-    sections.value.forEach((section) => {
-        observer.observe(section);
+      });
+    },
+    {
+      root: contentRef.value,
+      threshold: 0.5,
     }
-    );
+  );
+
+//   observer.observe(sections);
+
+//   sections.value.forEach((section) => {
+//     observer.observe(section);
+//   });
 });
 
 onBeforeUnmount(() => {
-    if (observer) {
-        observer.disconnect();
-    }
+  if (observer) {
+    observer.disconnect();
+  }
 });
 
 </script>
@@ -152,7 +160,7 @@ onBeforeUnmount(() => {
 
 .section {
     padding: 20px;
-    min-height: 200px;
+    min-height: 400px;
 }
 
 .sub-items {
