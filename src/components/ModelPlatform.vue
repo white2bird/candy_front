@@ -10,7 +10,7 @@
         <div class="model_platform_content">
             <!-- 此处放tabes 组件 -->
             <div>
-                <div class="tabs">
+                <div class="tabs" ref="tabsRef">
                     <div v-for="(tab, index) in tabs" :key="index"
                         :class="['tab', { active: activeTabIndex === index }]" @click="scrollToSection(index)">
                         {{ tab.title }}
@@ -39,8 +39,7 @@
 </template>
 
 <script setup>
-// import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick, getCurrentInstance } from 'vue';
 
 const tabs = ref([
     {
@@ -60,48 +59,71 @@ const tabs = ref([
 const activeTabIndex = ref(0);
 const sections = ref([]);
 const contentRef = ref(null);
-let observer = null;
+const vueTabs = ref(null);
+const tabsRef = ref(null);
+const click_to_tab = ref(false);
 
+const tabPostionY = ref(0);
+const tabHeight = ref(0);
+
+const pageInstance = getCurrentInstance();
+// 获取dom节点对象
+
+
+let observer = null;
+let set_click_close;
 const scrollToSection = (index) => {
     if (sections.value[index]) {
+        clearTimeout(set_click_close)
+        click_to_tab.value = true
         sections.value[index].scrollIntoView({ behavior: 'smooth' });
         activeTabIndex.value = index;
-        // sections.value = contentRef.value.querySelectorAll('.section');
+        // 防止抖动
+        set_click_close = setTimeout(() => {
+            // 防止滚动事件影响点击态
+            click_to_tab.value = false
+        }, 400)
     }
 };
 
 onMounted(async () => {
     // 等待下一次 DOM 更新，确保所有的 refs 都已被正确赋值
     await nextTick();
-
-
     // 获取所有的 section 元素
     const current_section = contentRef.value.querySelectorAll('.section');
+    tabPostionY.value = tabsRef.value.getBoundingClientRect().y
+    tabHeight.value = tabsRef.value?.clientHeight
+
+    // 监听滚动事件
+    window.addEventListener('scroll', scroll, true)
+
+    vueTabs.value = tabsRef.value
     if (current_section !== undefined && current_section !== null && current_section.length > 0) {
         sections.value = current_section;
     }
-    observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                const index = Array.from(sections.value).findIndex(section => section === entry.target)
-                console.log('-----------index-------------', index)
-                // if(index - activeTabIndex.value > 1 || activeTabIndex.value - index > 1){
-                //     return
-                // }
-                activeTabIndex.value = index
-            })
-        },
-        {
-            root: contentRef.value,
-            threshold: 0.6,
-        }
-    );
 
-    sections.value.forEach((section) => {
-        observer.observe(section);
-    }
-    );
 });
+
+
+
+let scrollTimeout;
+// 监听滚动事件
+const scroll = () => {
+    if (click_to_tab.value == true) {
+        return
+    }
+
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        for (let a = sections.value.length - 1; a >= 0; a--) {
+            if (sections.value[a].getBoundingClientRect().y <= tabPostionY.value + tabHeight.value) {
+                activeTabIndex.value = a;
+                break;
+            }
+        }
+    }, 200)
+}
+
 
 onBeforeUnmount(() => {
     if (observer) {
